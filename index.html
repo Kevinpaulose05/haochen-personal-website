@@ -27,14 +27,32 @@
       <span class="seal">HL</span>
       <span class="wordmark-text">Haochen&nbsp;Liu</span>
     </a>
-    <nav aria-label="Primary">
+    <nav class="nav-desktop" aria-label="Primary">
       <a href="#about">About</a>
       <a href="#focus">Focus</a>
       <a href="#approach">Approach</a>
       <a href="#experience">Experience</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </nav>
+    <button class="nav-toggle" type="button" aria-label="Open menu"
+            aria-expanded="false" aria-controls="nav-panel">
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+    </button>
   </header>
+
+  <div class="nav-panel" id="nav-panel" aria-hidden="true">
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#focus">Focus</a>
+      <a href="#approach">Approach</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <p class="nav-panel-foot">
+      <a href="mailto:hao.liu@americanfundstars.com">hao.liu@americanfundstars.com</a>
+    </p>
+  </div>
 
   <main id="top">
 
@@ -318,6 +336,10 @@
       <a class="footer-aside" href="film.html">Production archive ↗</a>
     </div>
   </footer>
+
+  <button class="to-top" type="button" aria-label="Back to top">
+    <span aria-hidden="true">↑</span>
+  </button>
 
   <script src="js/main.js"></script>
 </body>
