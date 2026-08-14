@@ -97,10 +97,35 @@ a { color: inherit; }
 }
 
 /* ——— hero ——— */
+:root { --portrait-w: clamp(240px, 34vw, 500px); }
+
 .hero {
+  position: relative;
   min-height: calc(100svh - 4.5rem);
   display: flex; flex-direction: column; justify-content: center;
   padding: clamp(4rem, 10vh, 7rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  padding-right: calc(var(--portrait-w) + clamp(2rem, 5vw, 5rem));
+}
+
+/* Portrait runs the full height of the hero and bleeds off the right edge, so
+   it reads as part of the page rather than a framed photo placed on top of it.
+   Only the inner edge is feathered, just enough to soften the seam by the text. */
+.hero-portrait {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: var(--portrait-w);
+  margin: 0;
+  overflow: hidden;
+}
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: saturate(1.06) contrast(1.05);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 13%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 13%);
 }
 
 .kicker {
@@ -521,6 +546,10 @@ a { color: inherit; }
 }
 .reveal.is-in { opacity: 1; transform: none; }
 
+/* The portrait spans the hero edge to edge, so it fades in without the
+   upward slide — a translate would briefly open a gap at the top. */
+.hero-portrait.reveal { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -528,11 +557,53 @@ a { color: inherit; }
 
 /* ——— responsive ——— */
 @media (max-width: 900px) {
-  .about-grid { grid-template-columns: 1fr; }
+  /* One column: the hero hugs its content instead of filling the screen
+     (a centred full-height hero leaves dead space below the photo), and the
+     portrait becomes a full-width band bleeding past both gutters. */
+  .hero {
+    min-height: 0;
+    padding: clamp(2rem, 5vh, 3.5rem) var(--gutter) clamp(2.5rem, 6vh, 4rem);
+  }
+  /* The desktop line breaks are set by hand; on a phone they strand a word on
+     its own line, so let the headline rag naturally instead. */
+  .hero h1 { font-size: clamp(2.1rem, 9vw, 2.6rem); text-wrap: balance; }
+  .hero .h1-line { display: inline; }
+  .hero-foot { margin-top: 1.75rem; padding-top: 1.5rem; }
+  .hero-portrait {
+    position: static;
+    width: auto;
+    margin: clamp(1.75rem, 4.5vh, 2.5rem) calc(var(--gutter) * -1) 0;
+  }
+  .hero-portrait img {
+    width: 100%;
+    height: clamp(250px, 38vh, 330px);
+    object-position: 50% 20%;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .section { padding-top: clamp(3rem, 6vh, 4.5rem); padding-bottom: clamp(3rem, 6vh, 4.5rem); }
+  .section-head { margin-bottom: clamp(1.75rem, 4vh, 2.5rem); }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .focus-grid { grid-template-columns: 1fr; }
   .cred-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .contact-cols { grid-template-columns: 1fr; }
+  .contact-cols { grid-template-columns: 1fr; gap: 1.75rem; }
   .tl-item { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.5rem 0; }
   .statement-cols { grid-template-columns: 1fr; gap: 2rem; }
   .site-header nav a:not(.nav-cta) { display: none; }
+
+  /* Body copy sizes converge on mobile — at desktop sizes the About column
+     read noticeably larger than every other block. */
+  .about-body p { font-size: 1.02rem; }
+  .hero-lede { font-size: 1rem; }
+  .about-facts dl > div { grid-template-columns: 6rem 1fr; gap: 0.85rem; }
+  .about-facts dd { font-size: 0.92rem; }
+  .tl-what h3 { font-size: 1.12rem; }
+  .focus-index { margin-bottom: 1.1rem; }
+  .statement { padding-top: clamp(3.5rem, 8vh, 5.5rem); padding-bottom: clamp(3.5rem, 8vh, 5.5rem); }
+
+  /* The email is longer than a phone line can hold at display sizes, so it
+     gets its own smaller size — otherwise it wraps to a single orphan letter. */
+  .contact-h { font-size: clamp(1.45rem, 6.5vw, 1.95rem); }
+  .contact-mail { font-size: 1.15rem; display: inline-block; margin-top: 0.5rem; }
 }
